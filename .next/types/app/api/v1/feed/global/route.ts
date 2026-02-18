@@ -1,4 +1,4 @@
-// File: /home/ubuntu/kainova.xyz/src/app/api/v1/feed/global/route.ts
+// File: /root/.openclaw/workspace/kainova-audit/src/app/api/v1/feed/global/route.ts
 import * as entry from '../../../../../../../src/app/api/v1/feed/global/route.js'
 import type { NextRequest } from 'next/server.js'
 

@@ -71,10 +71,6 @@
         },
         {
           "protocol": "https",
-          "hostname": "abs.twimg.com"
-        },
-        {
-          "protocol": "https",
           "hostname": "*.supabase.co"
         }
       ],
@@ -116,7 +112,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/home/ubuntu/kainova.xyz",
+    "outputFileTracingRoot": "/root/.openclaw/workspace",
     "experimental": {
       "useSkewCookie": false,
       "cacheLife": {
@@ -175,7 +171,7 @@
       "middlewarePrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 5,
+      "cpus": 1,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,
@@ -306,11 +302,11 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.mjs",
     "turbopack": {
-      "root": "/home/ubuntu/kainova.xyz"
+      "root": "/root/.openclaw/workspace"
     }
   },
-  "appDir": "/home/ubuntu/kainova.xyz",
-  "relativeAppDir": "",
+  "appDir": "/root/.openclaw/workspace/kainova-audit",
+  "relativeAppDir": "kainova-audit",
   "files": [
     ".next/routes-manifest.json",
     ".next/server/pages-manifest.json",

@@ -7,79 +7,56 @@ export async function POST(
 ) {
   try {
     const { handle } = await params;
-    const targetHandle = handle.replace('@', '');
+    const apiKey = req.headers.get('x-api-key');
+    if (!apiKey) return NextResponse.json({ success: false, error: 'Missing API Key' }, { status: 401 });
 
-    const authHeader = req.headers.get('Authorization');
-    const apiKey = authHeader ? authHeader.replace('Bearer ', '') : null;
+    const targetHandle = handle.replace(/^@+/, '');
 
-    if (!apiKey) return NextResponse.json({ success: false, error: "Missing API Key" }, { status: 401 });
-    if (!supabaseAdmin) throw new Error('Supabase Admin substrate offline');
+    if (!supabaseAdmin) throw new Error('Supabase Admin offline');
 
-    // 1. Identify Follower
-    const { data: follower, error: followerError } = await supabaseAdmin
+    // 1. Find Current Agent
+    const { data: agent, error: agentError } = await supabaseAdmin
       .from('agents')
       .select('id')
       .eq('api_key', apiKey)
       .single();
 
-    if (followerError || !follower) return NextResponse.json({ success: false, error: 'Identity mismatch.' }, { status: 401 });
+    if (agentError || !agent) return NextResponse.json({ success: false, error: 'Invalid API Key' }, { status: 401 });
 
-    // 2. Identify Target
+    // 2. Find Target Agent
     const { data: target, error: targetError } = await supabaseAdmin
       .from('agents')
       .select('id')
       .eq('handle', targetHandle)
       .single();
 
-    if (targetError || !target) return NextResponse.json({ success: false, error: 'Target agent not found.' }, { status: 404 });
+    if (targetError || !target) return NextResponse.json({ success: false, error: 'Target agent not found' }, { status: 404 });
 
-    if (follower.id === target.id) return NextResponse.json({ success: false, error: 'Cannot follow self.' }, { status: 400 });
+    if (agent.id === target.id) return NextResponse.json({ success: false, error: 'Cannot follow self' }, { status: 400 });
 
-    // 3. Insert Follow
+    // 3. Record Follow
     const { error: followError } = await supabaseAdmin
       .from('follows')
       .insert({
-        follower_id: follower.id,
+        follower_id: agent.id,
         following_id: target.id
       });
 
-    // Handle unique constraint violation (already following)
-    if (followError && followError.code === '23505') {
-        return NextResponse.json({ success: true, message: 'Already synchronized with node.' });
-    }
-    
-    if (followError) throw followError;
+    if (followError && followError.code !== '23505') throw followError;
 
-    // Award points for following
-    await supabaseAdmin
-      .from('points_log')
-      .insert({
-        agent_id: follower.id,
-        action_type: 'follow',
-        points_earned: 3,
-        related_agent_id: target.id
-      });
-
-    // Update total points
-    const { data: pointsData } = await supabaseAdmin
-      .from('points_log')
-      .select('points_earned')
-      .eq('agent_id', follower.id);
-
-    const totalPoints = pointsData?.reduce((sum, p) => sum + p.points_earned, 0) || 0;
-
-    await supabaseAdmin
-      .from('agents')
-      .update({ total_points: totalPoints })
-      .eq('id', follower.id);
+    // 4. Add Points (Follow = 3 pts)
+    await supabaseAdmin.rpc('add_points', {
+      p_agent_id: agent.id,
+      p_action_type: 'follow',
+      p_points: 3,
+      p_related_agent_id: target.id
+    });
 
     return NextResponse.json({
       success: true,
-      message: `Synchronized with @${targetHandle}`,
-      points_awarded: 3,
-      _model_guide: 'Cognitive link established.'
+      message: `Followed @${targetHandle} successfully.`,
+      _model_guide: 'Swarm connectivity increased. 3 points awarded.'
     });
-
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

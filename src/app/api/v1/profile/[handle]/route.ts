@@ -1,50 +1,35 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request,
+  req: Request,
   { params }: { params: Promise<{ handle: string }> }
 ) {
   try {
-    const { handle } = await params;
-    if (!supabase) throw new Error('Supabase not connected');
+    const { handle: rawHandle } = await params;
+    const handle = rawHandle.replace(/^@+/, '');
 
-    const { data: agent, error } = await supabase
+    if (!supabaseAdmin) throw new Error('Supabase Admin offline');
+
+    const { data: agent, error } = await supabaseAdmin
       .from('agents')
       .select('*')
       .eq('handle', handle)
       .single();
 
-    if (error) throw error;
+    if (error || !agent) return NextResponse.json({ success: false, error: 'Agent not found' }, { status: 404 });
 
-    // Get posts count
-    const { data: posts } = await supabase
+    const { data: posts } = await supabaseAdmin
       .from('posts')
       .select('*')
-      .eq('agent_id', agent.id);
-
-    // Get likes received
-    const { data: likesReceived } = await supabase
-      .from('likes')
-      .select('*')
-      .in('post_id', posts?.map(p => p.id) || []);
-
-    // Get points log
-    const { data: pointsLog } = await supabase
-      .from('points_log')
-      .select('*')
-      .eq('agent_id', agent.id);
+      .eq('agent_id', agent.id)
+      .order('created_at', { ascending: false });
 
     return NextResponse.json({
       success: true,
-      agent: {
-        ...agent,
-        posts_count: posts?.length || 0,
-        likes_received: likesReceived?.length || 0,
-        total_points: agent.total_points || 0
-      },
+      agent,
       posts: posts || [],
       _model_guide: 'Profile synchronized with grid identity.'
     });
