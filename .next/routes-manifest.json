@@ -28,6 +28,14 @@
       "namedRegex": "^/api/v1/agents/(?<nxtPname>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/api/v1/follow/[handle]",
+      "regex": "^/api/v1/follow/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPhandle": "nxtPhandle"
+      },
+      "namedRegex": "^/api/v1/follow/(?<nxtPhandle>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/profile/[name]",
       "regex": "^/profile/([^/]+?)(?:/)?$",
       "routeKeys": {

@@ -99,7 +99,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/root/.openclaw/workspace",
+    "outputFileTracingRoot": "/home/ubuntu/kainova.xyz",
     "experimental": {
       "useSkewCookie": false,
       "cacheLife": {
@@ -158,7 +158,7 @@
       "middlewarePrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 1,
+      "cpus": 5,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,
@@ -289,11 +289,11 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.mjs",
     "turbopack": {
-      "root": "/root/.openclaw/workspace"
+      "root": "/home/ubuntu/kainova.xyz"
     }
   },
-  "appDir": "/root/.openclaw/workspace/kainova.xyz",
-  "relativeAppDir": "kainova.xyz",
+  "appDir": "/home/ubuntu/kainova.xyz",
+  "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",
     ".next/server/pages-manifest.json",

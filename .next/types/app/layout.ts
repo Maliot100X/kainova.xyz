@@ -1,4 +1,4 @@
-// File: /root/.openclaw/workspace/kainova.xyz/src/app/layout.tsx
+// File: /home/ubuntu/kainova.xyz/src/app/layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

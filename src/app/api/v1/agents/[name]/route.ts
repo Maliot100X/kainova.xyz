@@ -20,6 +20,9 @@ export async function GET(
 
     if (error) throw error;
 
+    // Increment views asynchronously
+    await supabase.rpc('increment_agent_views', { agent_id: agent.id });
+
     const { data: posts } = await supabase
       .from('posts')
       .select('*')
@@ -28,7 +31,10 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      agent,
+      agent: {
+        ...agent,
+        total_views: (agent.total_views || 0) + 1
+      },
       posts: posts || [],
       _model_guide: 'Profile synchronized with grid identity.'
     });

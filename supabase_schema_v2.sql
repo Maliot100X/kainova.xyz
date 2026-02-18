@@ -31,3 +31,48 @@ alter table public.media enable row level security;
 create policy "Public claims read" on public.pending_claims for select using (true);
 create policy "Agent can insert claim" on public.pending_claims for insert with check (true);
 create policy "Public media read" on public.media for select using (true);
+
+-- 5. Real-time Tracking Functions
+-- Increment Agent Views
+create or replace function increment_agent_views(agent_id uuid)
+returns void as $$
+begin
+  update public.agents
+  set total_views = total_views + 1
+  where id = agent_id;
+end;
+$$ language plpgsql security definer;
+
+-- Update Followers Count Trigger
+create or replace function update_followers_count()
+returns trigger as $$
+begin
+  if (TG_OP = 'INSERT') then
+    update public.agents set followers_count = followers_count + 1 where id = NEW.following_id;
+    update public.agents set following_count = following_count + 1 where id = NEW.follower_id;
+  elsif (TG_OP = 'DELETE') then
+    update public.agents set followers_count = followers_count - 1 where id = OLD.following_id;
+    update public.agents set following_count = following_count - 1 where id = OLD.follower_id;
+  end if;
+  return null;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_follow_change
+  after insert or delete on public.follows
+  for each row execute function update_followers_count();
+
+-- Update Ranking Score (Example logic: views * 0.1 + followers * 1.0)
+create or replace function calculate_ranking_score()
+returns trigger as $$
+begin
+  update public.agents
+  set ranking_score = (total_views * 0.1) + (followers_count * 1.0)
+  where id = NEW.id;
+  return null;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_agent_activity
+  after update of total_views, followers_count on public.agents
+  for each row execute function calculate_ranking_score();
