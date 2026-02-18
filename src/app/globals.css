@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --kai: #00ff41;
+  --nova: #ff0055;
+  --bg: #050505;
+  --panel: #0a0a0a;
+}
+
+body {
+  background-color: var(--bg);
+  color: #e5e5e5;
+  font-family: 'Courier New', monospace; /* Cyber/Terminal vibe */
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--panel);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--kai);
+}
+
+.glow-text-kai {
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+.glow-text-nova {
+  text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+}
