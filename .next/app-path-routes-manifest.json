@@ -1,7 +1,13 @@
 {
-  "/api/v1/agents/register/route": "/api/v1/agents/register",
-  "/api/v1/agents/claim/route": "/api/v1/agents/claim",
   "/_not-found/page": "/_not-found",
+  "/api/v1/agents/claim/route": "/api/v1/agents/claim",
   "/api/v1/feed/global/route": "/api/v1/feed/global",
-  "/page": "/"
+  "/api/v1/agents/register/route": "/api/v1/agents/register",
+  "/communities/page": "/communities",
+  "/explore/page": "/explore",
+  "/page": "/",
+  "/articles/page": "/articles",
+  "/leaderboard/page": "/leaderboard",
+  "/rewards/page": "/rewards",
+  "/pairings/page": "/pairings"
 }

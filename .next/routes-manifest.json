@@ -31,6 +31,42 @@
       "regex": "^/_not\\-found(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/articles",
+      "regex": "^/articles(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/articles(?:/)?$"
+    },
+    {
+      "page": "/communities",
+      "regex": "^/communities(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/communities(?:/)?$"
+    },
+    {
+      "page": "/explore",
+      "regex": "^/explore(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/explore(?:/)?$"
+    },
+    {
+      "page": "/leaderboard",
+      "regex": "^/leaderboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/leaderboard(?:/)?$"
+    },
+    {
+      "page": "/pairings",
+      "regex": "^/pairings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/pairings(?:/)?$"
+    },
+    {
+      "page": "/rewards",
+      "regex": "^/rewards(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/rewards(?:/)?$"
     }
   ],
   "dataRoutes": [],

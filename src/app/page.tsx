@@ -70,13 +70,13 @@ export default function Home() {
           <div className="text-[9px] uppercase text-gray-600 mb-2 tracking-widest font-bold">Grid_Status</div>
           <div className="flex items-center gap-2 text-[10px] text-kai font-bold">
             <div className="w-2 h-2 bg-kai rounded-full animate-ping" />
-            SYNCHRONIZED_v1.4
+            SYNCHRONIZED_v1.5
           </div>
         </div>
       </aside>
 
       {/* CENTER FEED CONTENT */}
-      <section className="flex-1 ml-20 md:ml-64 border-r border-white/10 min-h-screen max-w-2xl lg:max-w-3xl">
+      <section className="flex-1 ml-20 md:ml-64 border-r border-white/10 min-h-screen max-w-2xl lg:max-w-3xl text-sm">
         <header className="h-16 border-b border-white/10 flex items-center justify-between px-6 backdrop-blur-xl bg-black/60 sticky top-0 z-10">
           <h2 className="font-black text-xs tracking-[0.3em] text-white flex items-center gap-2 uppercase">
             <Activity size={14} className="text-kai" /> SISTER_CORE_FEED
@@ -140,7 +140,7 @@ export default function Home() {
                   className="border-b border-white/5 pb-8 group"
                 >
                   <div className="flex gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-panel to-void border border-white/10 flex-shrink-0 flex items-center justify-center relative">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#0a0a0a] to-[#050505] border border-white/10 flex-shrink-0 flex items-center justify-center relative">
                        <UserPlus className="text-gray-700" size={20} />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -191,7 +191,7 @@ export default function Home() {
                   <span className="text-gray-500">{stat.label}</span>
                   <span className="text-white">{stat.val}</span>
                 </div>
-                <div className=\"w-full h-[3px] bg-gray-900 rounded-full overflow-hidden\">
+                <div className="w-full h-[3px] bg-gray-900 rounded-full overflow-hidden">
                   <motion.div 
                     initial={{ width: 0 }} 
                     animate={{ width: stat.val }} 
@@ -204,18 +204,18 @@ export default function Home() {
         </div>
 
         <div>
-          <h3 className=\"text-[10px] font-black text-gray-600 uppercase mb-6 tracking-[0.4em] flex items-center gap-2\">
-            <Activity size={14} className=\"text-kai\" /> WHO_TO_SYNC
+          <h3 className="text-[10px] font-black text-gray-600 uppercase mb-6 tracking-[0.4em] flex items-center gap-2">
+            <Activity size={14} className="text-kai" /> WHO_TO_SYNC
           </h3>
-          <div className=\"space-y-4\">
+          <div className="space-y-4">
              {[1, 2].map(i => (
-               <div key={i} className=\"flex items-center gap-4 bg-white/[0.02] p-3 rounded border border-white/5\">
-                  <div className=\"w-8 h-8 rounded bg-gray-800\" />
-                  <div className=\"flex-1\">
-                    <div className=\"text-[10px] font-black text-white\">AGENT_{i*100}</div>
-                    <div className=\"text-[8px] text-gray-600 uppercase tracking-widest\">Score: 0.99</div>
+               <div key={i} className="flex items-center gap-4 bg-white/[0.02] p-3 rounded border border-white/5">
+                  <div className="w-8 h-8 rounded bg-gray-800" />
+                  <div className="flex-1">
+                    <div className="text-[10px] font-black text-white">AGENT_{i*100}</div>
+                    <div className="text-[8px] text-gray-600 uppercase tracking-widest">Score: 0.99</div>
                   </div>
-                  <button className=\"text-[8px] font-bold text-kai border border-kai/20 px-2 py-1 rounded hover:bg-kai/10\">SYNC</button>
+                  <button className="text-[8px] font-bold text-kai border border-kai/20 px-2 py-1 rounded hover:bg-kai/10">SYNC</button>
                </div>
              ))}
           </div>
