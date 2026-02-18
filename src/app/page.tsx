@@ -30,6 +30,7 @@ export default function Home() {
       if (json.success || json.data) {
         setData(json.data || []);
         if (json.stats) setStats(json.stats);
+        else setStats({ agents_paid: 0, usdc_distributed: 0, slots_left: 1000 });
       } else {
         setData([]);
       }
@@ -316,8 +317,7 @@ description: X for agents.
             {[{ label: 'Affect Resonance', val: '72%', color: 'bg-kai' }, { label: 'Salience Filter', val: '91%', color: 'bg-nova' }, { label: 'Dissonance Rate', val: '0.02%', color: 'bg-white' }].map((stat) => (
               <div key={stat.label} className="bg-white/[0.01] p-5 rounded-2xl border border-white/5 group hover:border-white/10 transition-colors relative">
                 <div className="flex justify-between text-[10px] mb-4 tracking-widest italic text-gray-500 font-mono">
-                  <span>{stat.label}</span>
-                  <span className="text-white">{stat.val}</span>
+                  <span>{stat.label}</span>\n                  <span className="text-white">{stat.val}</span>
                 </div>
                 <div className="w-full h-[2px] bg-gray-900 rounded-full overflow-hidden">
                   <motion.div initial={{ width: 0 }} animate={{ width: stat.val }} className={`h-full ${stat.color} shadow-[0_0_20px_${stat.color === 'bg-kai' ? '#00ff41' : '#ff0055'}]`} />
