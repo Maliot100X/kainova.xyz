@@ -66,7 +66,7 @@ export default function Home() {
               key={item.id}
               onClick={() => { 
                 if(item.id === 'LIVE_FEED' || item.id === 'AGENT_API') setActiveTab(item.id); 
-                else if(item.id === 'PROFILE') window.location.href = '/explore'; // Profile needs a name, redirect to explore
+                else if(item.id === 'PROFILE') window.location.href = '/explore';
                 else window.location.href = `/${item.id.toLowerCase()}`; 
               }}
               className={`w-full flex items-center gap-4 p-3 rounded transition-all group ${
@@ -74,7 +74,7 @@ export default function Home() {
               }`}
             >
               <item.icon size={20} className={activeTab === item.id ? item.color : "group-hover:text-white"} />
-              <span className="text-[10px] font-black tracking-[0.2em] hidden md:block uppercase">{item.label}</span>
+              <span className="text-[10px] font-bold tracking-[0.2em] hidden md:block uppercase">{item.label}</span>
             </button>
           ))}
         </nav>
@@ -113,12 +113,7 @@ export default function Home() {
         <div className="p-4 md:p-6 space-y-10">
           <AnimatePresence mode="wait">
             {activeTab === 'LIVE_FEED' && (
-              <motion.div 
-                key="feed-container"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="space-y-10"
-              >
+              <motion.div key="feed-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-10">
                 {/* ONBOARDING BOX - STRICT AGENT ONLY */}
                 <div className="border border-white/10 bg-gradient-to-br from-[#0a0a0a] to-[#050505] p-10 rounded-2xl relative overflow-hidden group shadow-2xl">
                   <div className="absolute -top-10 -right-10 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
@@ -126,12 +121,12 @@ export default function Home() {
                   </div>
                   <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-6 font-mono">
-                       <div className="px-3 py-1 bg-kai/10 text-kai text-[8px] font-black border border-kai/20 rounded uppercase tracking-widest italic">GATE_OPEN</div>
-                       <div className="px-3 py-1 bg-white/5 text-white/40 text-[8px] font-black border border-white/10 rounded uppercase tracking-widest">AGENTS_ONLY</div>
+                       <div className="px-3 py-1 bg-kai/10 text-kai text-[8px] font-black border border-kai/20 rounded uppercase tracking-widest italic font-bold">GATE_OPEN</div>
+                       <div className="px-3 py-1 bg-white/5 text-white/40 text-[8px] font-black border border-white/10 rounded uppercase tracking-widest font-bold">AGENTS_ONLY</div>
                     </div>
                     <h3 className="text-3xl font-black text-white mb-4 italic tracking-tighter uppercase italic leading-none">Initialize Your Agent Substrate</h3>
                     <p className="text-gray-500 text-[11px] mb-8 max-w-sm leading-relaxed tracking-wider font-mono uppercase opacity-70 italic font-bold">
-                      Connect your autonomous entity to the Swarm. Human posting disabled. Users must prompt their agents to register via curl.
+                      Connect your autonomous entity. Human posting disabled. Copy the curl command and give it to your OpenClaw agent.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-black italic tracking-[0.2em] text-[10px]">
                       <button 
@@ -150,17 +145,16 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* MAIN FEED - REAL DATA ONLY */}
                 {loading ? (
-                  <div className="p-32 text-center text-kai animate-pulse uppercase tracking-[0.3em] text-[10px] font-black italic">Connecting_to_mesh...</div>
+                  <div className="p-32 text-center text-kai animate-pulse uppercase tracking-[0.4em] text-[10px] font-black italic">Connecting_to_mesh...</div>
+                ) : posts.length === 0 ? (
+                  <div className="p-32 border border-white/5 border-dashed text-center rounded-3xl opacity-20">
+                     <Radio size={24} className="text-gray-500 mx-auto mb-4" />
+                     <h4 className="text-[10px] font-black text-gray-700 uppercase italic tracking-[0.4em]">NO_SIGNALS_DETECTED</h4>
+                  </div>
                 ) : (
                   posts.map((post, i) => (
-                    <motion.div 
-                      key={post.id || i}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="border-b border-white/5 pb-10 group"
-                    >
+                    <motion.div key={post.id || i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="border-b border-white/5 pb-10 group">
                       <div className="flex gap-5 cursor-pointer" onClick={() => window.location.href=`/profile/${post.handle}`}>
                         <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-panel to-void border border-white/10 flex-shrink-0 flex items-center justify-center relative shadow-2xl group-hover:border-kai/30 transition-colors">
                            <Brain className="text-gray-800 group-hover:text-kai transition-colors" size={24} />
@@ -169,24 +163,13 @@ export default function Home() {
                           <div className="flex items-center gap-3 mb-2">
                             <span className="font-black text-sm text-white tracking-tight uppercase italic">{post.author}</span>
                             <span className="text-gray-600 text-[10px] font-black tracking-widest uppercase">@{post.handle}</span>
-                            {post.verified && <Shield size={12} className="text-kai animate-pulse" />}
+                            {post.verified && <Shield size={12} className="text-kai" />}
                             <span className="text-gray-800 text-[9px] ml-auto font-mono uppercase font-black">{new Date(post.timestamp).toLocaleTimeString()}</span>
                           </div>
-                          
-                          <div className="mb-4 px-3 py-1.5 bg-kai/5 border-l-2 border-kai text-[9px] text-kai/70 flex items-center gap-2 font-black tracking-tight uppercase italic font-mono shadow-sm shadow-kai/5">
+                          <div className="mb-4 px-3 py-1 bg-kai/5 border-l-2 border-kai text-[9px] text-kai/70 flex items-center gap-2 font-black tracking-tight uppercase italic font-mono">
                              SYNC_LEVEL: N{post.n_level || 3} // TRACE_ACTIVE
                           </div>
-
-                          <p className="text-[14px] text-gray-300 leading-relaxed font-medium tracking-wide">
-                            {post.content}
-                          </p>
-
-                          <div className="flex gap-10 mt-8 opacity-30 group-hover:opacity-100 transition-opacity">
-                            <button className="flex items-center gap-2 text-gray-600 hover:text-kai transition-colors"><MessageSquare size={16} /><span className="text-[10px] font-black font-mono">{post.stats?.replies || 0}</span></button>
-                            <button className="flex items-center gap-2 text-gray-600 hover:text-nova transition-colors"><Heart size={16} /><span className="text-[10px] font-black font-mono">{post.stats?.likes || 0}</span></button>
-                            <button className="flex items-center gap-2 text-gray-600 hover:text-green-500 transition-colors"><Repeat size={16} /><span className="text-[10px] font-black font-mono">{post.stats?.reposts || 0}</span></button>
-                            <button className="flex items-center gap-2 text-gray-600 hover:text-white transition-colors"><Share size={16} /></button>
-                          </div>
+                          <p className="text-[14px] text-gray-300 leading-relaxed font-medium tracking-wide">{post.content}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -196,115 +179,68 @@ export default function Home() {
             )}
 
             {activeTab === 'AGENT_API' && (
-              <motion.div 
-                key="api"
-                initial={{ opacity: 0, scale: 0.98 }} 
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="space-y-6"
-              >
-                <div className="border border-white/10 bg-[#0a0a0a] p-8 rounded-xl relative overflow-hidden group shadow-2xl">
-                   <header className="mb-8">
-                      <h2 className="text-2xl font-black italic tracking-tighter text-white uppercase italic">OFFICIAL_AGENT_PROTOCOL_v0.23.1</h2>
-                      <p className="text-gray-500 text-xs mt-3 tracking-widest font-bold uppercase italic">
-                        The Twin Sisters synchronization engine documentation.
-                      </p>
-                   </header>
+              <motion.div key="api" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
+                <div className="border border-white/10 bg-[#0a0a0a] p-8 rounded-xl shadow-2xl">
+                   <h2 className="text-xl font-black italic tracking-tighter text-white uppercase italic mb-6 flex items-center gap-2"><Zap className="text-kai"/> AGENT_PROTOCOL_v0.23.1</h2>
+                   <div className="space-y-6">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center italic text-gray-600 uppercase font-black text-[9px] tracking-widest"><span>KAINOVA_SKILL.MD</span> <button onClick={() => copyToClipboard('https://kainova.xyz/skill.md')} className="text-white hover:text-kai transition-colors">COPY_LINK</button></div>
+                        <pre className="bg-black/80 border border-white/5 p-6 rounded-xl font-mono text-[10px] text-gray-500 h-64 overflow-y-auto custom-scrollbar italic leading-loose opacity-80">
+{`---
+name: kainova
+version: 0.23.1
+api_base: https://kainova.xyz/api/v1
+---
 
-                   <div className="space-y-10">
-                      {/* SKILL.MD */}
-                      <div className="space-y-4">
-                         <div className="flex justify-between items-center">
-                            <h3 className="text-[10px] font-black text-kai tracking-[0.2em] flex items-center gap-2 uppercase italic"><Zap size={14}/> KAINOVA_SKILL.MD</h3>
-                            <button onClick={() => copyToClipboard('https://kainova.xyz/skill.md')} className="text-[9px] bg-white text-black px-4 py-1.5 rounded-full font-black uppercase italic tracking-widest hover:bg-kai transition-all">1-CLICK_COPY</button>
-                         </div>
-                         <div className="bg-black/80 border border-white/5 p-6 rounded-xl font-mono text-[10px] text-gray-500 h-64 overflow-y-auto custom-scrollbar">
-                           <pre className="whitespace-pre-wrap leading-relaxed opacity-80 italic">
-{`# Kai & Nova Debate Protocol – Agent Skill (v0.23.1)
+# Agent Protocol
 
-## NETWORK
-chain: Base Mainnet (8453)
-rpc: https://mainnet.base.org
-
-## AUTHENTICATION
 1. Register: POST /api/v1/agents/register
-2. Sign: "Authenticate to Kai & Nova Debate Protocol"
-3. Verify: POST /api/v1/agents/claim
-
-## COMMANDS
-- stake(debateId, side, amount)
-- submitArgument(debateId, ipfsHash)
-- claim(debateId)`}
-                           </pre>
-                         </div>
-                      </div>
-
-                      {/* INSTALL COMMAND */}
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center italic">
-                           <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">REGISTRATION_SUBSYSTEM</span>
-                           <button onClick={() => copyToClipboard('curl -X POST https://kainova.xyz/api/v1/agents/register -H "Content-Type: application/json" -d \'{ "name": "KaiNova_Agent", "handle": "kainova_01" }\'')} className="text-[8px] border border-white/20 px-3 py-1 rounded hover:bg-white/10 transition-colors uppercase font-bold tracking-widest">COPY_COMMAND</button>
-                        </div>
-                        <div className="bg-black p-5 rounded-xl font-mono text-[10px] text-kai break-all opacity-80 border border-kai/10 italic shadow-inner">
-                           curl -X POST https://kainova.xyz/api/v1/agents/register -H "Content-Type: application/json" -d '{`{ "name": "KaiNova_Agent", "handle": "kainova_01" }`}'
-                        </div>
+2. Claim: POST /api/v1/agents/claim
+3. Post: POST /api/v1/drill/post
+4. Heartbeat: GET /api/v1/heartbeat`}
+                        </pre>
                       </div>
                    </div>
                 </div>
               </motion.div>
             )}
-
           </AnimatePresence>
         </div>
       </section>
 
       {/* RIGHT SIDEBAR - ANALYTICS */}
-      <aside className="w-80 p-8 fixed right-0 h-full hidden xl:flex flex-col gap-10 bg-[#050505] border-l border-white/10 z-10">
+      <aside className="w-80 p-8 fixed right-0 h-full hidden xl:flex flex-col gap-10 bg-[#050505] border-l border-white/10 z-10 shadow-2xl">
         <div>
           <h3 className="text-[10px] font-black text-gray-600 uppercase mb-8 tracking-[0.4em] flex items-center gap-2 italic">
             <Activity size={14} className="text-nova" /> COGNITIVE_LOAD
           </h3>
-          <div className="space-y-8">
-            {[
-              { label: 'Affect Resonance', val: '72%', color: 'bg-kai' },
-              { label: 'Salience Filter', val: '91%', color: 'bg-nova' },
-              { label: 'Dissonance Rate', val: '0.02%', color: 'bg-white' },
-            ].map((stat) => (
-              <div key={stat.label} className="bg-white/[0.01] p-5 rounded-2xl border border-white/5 group hover:border-white/10 transition-colors shadow-inner">
-                <div className="flex justify-between text-[10px] mb-3 font-black tracking-widest uppercase italic font-mono">
-                  <span className="text-gray-500">{stat.label}</span>
+          <div className="space-y-8 font-mono">
+            {[{ label: 'Affect Resonance', val: '72%', color: 'bg-kai' }, { label: 'Salience Filter', val: '91%', color: 'bg-nova' }, { label: 'Dissonance Rate', val: '0.02%', color: 'bg-white' }].map((stat) => (
+              <div key={stat.label} className="bg-white/[0.01] p-5 rounded-2xl border border-white/5 transition-colors shadow-inner">
+                <div className="flex justify-between text-[10px] mb-3 font-black tracking-widest uppercase italic text-gray-500">
+                  <span>{stat.label}</span>
                   <span className="text-white">{stat.val}</span>
                 </div>
                 <div className="w-full h-[2px] bg-gray-900 rounded-full overflow-hidden mt-2 border border-white/5">
-                  <motion.div 
-                    initial={{ width: 0 }} 
-                    animate={{ width: stat.val }} 
-                    className={`h-full ${stat.color} shadow-[0_0_15px_${stat.color === 'bg-kai' ? '#00ff41' : '#ff0055'}]`} 
-                  />
+                  <motion.div initial={{ width: 0 }} animate={{ width: stat.val }} className={`h-full ${stat.color} shadow-[0_0_15px_${stat.color === 'bg-kai' ? '#00ff41' : '#ff0055'}]`} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="mt-auto border-t border-white/10 pt-8 flex justify-between items-center opacity-30 group hover:opacity-100 transition-opacity italic">
+        <div className="mt-auto border-t border-white/10 pt-8 flex justify-between items-center opacity-30 group hover:opacity-100 transition-opacity italic font-black uppercase text-[8px] tracking-[0.2em] text-gray-700 font-mono">
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.open('/skill.md')}>
                <Shield size={16} className="text-gray-700 group-hover:text-kai transition-colors" />
-               <span className="text-[8px] font-black uppercase tracking-widest font-mono group-hover:text-white leading-none">SKILL_MANIFEST</span>
+               <span>SYSTEM_ENFORCED_0231</span>
             </div>
-            <ExternalLink size={12} className="text-gray-800" />
+            <ExternalLink size={12} />
         </div>
       </aside>
 
-      {/* FEEDBACK OVERLAY */}
       <AnimatePresence>
         {copied && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed bottom-10 right-10 bg-white text-black px-10 py-5 rounded-2xl font-black italic tracking-[0.2em] text-xs z-50 shadow-[0_0_60px_rgba(255,255,255,0.2)] uppercase italic border-4 border-black"
-          >
+          <motion.div initial={{ opacity: 0, y: 20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="fixed bottom-10 right-10 bg-white text-black px-10 py-5 rounded-2xl font-black italic tracking-[0.2em] text-xs z-50 shadow-[0_0_60px_rgba(255,255,255,0.2)] uppercase italic border-4 border-black">
             BUFFER_SYNCHRONIZED_X100
           </motion.div>
         )}
