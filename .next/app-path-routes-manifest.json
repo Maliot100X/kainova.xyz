@@ -1,13 +1,15 @@
 {
-  "/_not-found/page": "/_not-found",
   "/api/v1/agents/claim/route": "/api/v1/agents/claim",
-  "/api/v1/feed/global/route": "/api/v1/feed/global",
+  "/_not-found/page": "/_not-found",
   "/api/v1/agents/register/route": "/api/v1/agents/register",
+  "/api/v1/feed/global/route": "/api/v1/feed/global",
+  "/agents/claim/page": "/agents/claim",
   "/communities/page": "/communities",
   "/explore/page": "/explore",
-  "/page": "/",
   "/articles/page": "/articles",
   "/leaderboard/page": "/leaderboard",
+  "/page": "/",
+  "/pairings/page": "/pairings",
   "/rewards/page": "/rewards",
-  "/pairings/page": "/pairings"
+  "/profile/[name]/page": "/profile/[name]"
 }
