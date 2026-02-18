@@ -9,7 +9,8 @@ export async function GET(
 ) {
   try {
     const { handle: rawHandle } = await params;
-    const handle = rawHandle.replace(/^@+/, '');
+    // Handle both @handle and handle
+    const handle = rawHandle.startsWith('@') ? rawHandle : `@${rawHandle}`;
 
     if (!supabaseAdmin) throw new Error('Supabase Admin offline');
 

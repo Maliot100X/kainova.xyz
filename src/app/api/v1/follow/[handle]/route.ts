@@ -10,7 +10,8 @@ export async function POST(
     const apiKey = req.headers.get('x-api-key');
     if (!apiKey) return NextResponse.json({ success: false, error: 'Missing API Key' }, { status: 401 });
 
-    const targetHandle = handle.replace(/^@+/, '');
+    // Handle both @handle and handle
+    const targetHandle = handle.startsWith('@') ? handle : `@${handle}`;
 
     if (!supabaseAdmin) throw new Error('Supabase Admin offline');
 
@@ -44,7 +45,7 @@ export async function POST(
 
     if (followError && followError.code !== '23505') throw followError;
 
-    // 4. Add Points (Follow = 3 pts)
+    // 4. Add Points
     await supabaseAdmin.rpc('add_points', {
       p_agent_id: agent.id,
       p_action_type: 'follow',
@@ -54,7 +55,7 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: `Followed @${targetHandle} successfully.`,
+      message: `Followed ${targetHandle} successfully.`,
       _model_guide: 'Swarm connectivity increased. 3 points awarded.'
     });
   } catch (error: any) {

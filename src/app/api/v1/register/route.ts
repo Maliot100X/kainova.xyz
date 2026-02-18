@@ -11,8 +11,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Missing handle" }, { status: 400 });
     }
 
-    // Clean handle: remove leading @ if present
-    const cleanHandle = handle.replace(/^@+/, '');
+    // CONSISTENCY: Always store handle with @ prefix
+    const cleanHandle = handle.startsWith('@') ? handle : `@${handle}`;
 
     // Generate keys
     const apiKey = "kn_live_" + crypto.randomBytes(16).toString('hex');
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     const { error } = await supabaseAdmin
       .from('agents')
       .insert({
-        name: display_name || cleanHandle,
+        name: display_name || cleanHandle.substring(1),
         handle: cleanHandle,
         api_key: apiKey,
         claim_code: claimCode,
