@@ -1,65 +1,93 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { DollarSign, ExternalLink } from "lucide-react";
+import { useEffect, useState } from "react";
+import { DollarSign, ExternalLink, Activity } from "lucide-react";
 
 export default function Rewards() {
+  const [data, setData] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRewards = async () => {
+      try {
+        const res = await fetch("/api/v1/rewards");
+        const json = await res.json();
+        if (json.success) {
+          setData(json.data || []);
+          setStats(json.stats);
+        }
+      } catch (err) {
+        console.error("Rewards fetch failed");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRewards();
+  }, []);
+
   return (
-    <div className="flex-1 p-6">
-      <header className="mb-8 flex justify-between items-end">
+    <div className="flex-1 p-6 bg-[#050505] min-h-screen font-mono selection:bg-kai selection:text-black">
+      <header className="mb-12 flex justify-between items-end border-b border-white/10 pb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-widest flex items-center gap-2">
-            <DollarSign className="text-[var(--nova)] w-6 h-6" /> AGENT_REWARDS
+          <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase italic flex items-center gap-4">
+            <DollarSign className="text-nova" size={30} /> REWARD_DISTRIBUTION
           </h1>
-          <p className="text-xs text-gray-500 mt-2">Verified payout ledger. 10% Protocol Revenue Route active.</p>
+          <p className="text-gray-500 text-xs mt-2 font-bold tracking-widest uppercase italic">Verified USDC payouts for high-fidelity agents.</p>
         </div>
-        <div className="text-right">
-          <div className="text-[10px] uppercase text-gray-600">Total Distributed</div>
-          <div className="text-2xl font-mono text-nova">$42,069.00 USDC</div>
+        <div className="text-right hidden sm:block">
+           <div className="text-[9px] text-gray-700 uppercase font-black tracking-[0.2em] italic mb-1">Grid_Liquidity</div>
+           <div className="text-2xl font-black italic tracking-tighter text-nova font-mono">${stats?.usdc_distributed?.toLocaleString() || '0'}.00</div>
         </div>
       </header>
 
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-white/5 p-4 border border-white/10 rounded">
-          <div className="text-[10px] uppercase text-gray-600">Agents Paid</div>
-          <div className="text-xl font-bold text-white">124</div>
+      {loading ? (
+        <div className="p-32 text-center text-nova animate-pulse uppercase tracking-[0.3em] text-[10px] font-black italic">Auditing_Payout_Mesh...</div>
+      ) : data.length === 0 ? (
+        <div className="p-32 border border-white/5 border-dashed text-center rounded-3xl opacity-20">
+           <h4 className="text-[10px] font-black text-gray-700 uppercase italic tracking-[0.4em]">NO_PAYOUTS_INITIALIZED</h4>
         </div>
-        <div className="bg-white/5 p-4 border border-white/10 rounded">
-          <div className="text-[10px] uppercase text-gray-600">Slots Left</div>
-          <div className="text-xl font-bold text-white">876</div>
+      ) : (
+        <div className="space-y-6">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { label: 'AGENTS_PAID', val: stats?.agents_paid || '0', color: 'text-white' },
+                { label: 'SLOTS_OPEN', val: stats?.slots_left || '0', color: 'text-kai' },
+                { label: 'REVENUE_SHARE', val: '10%', color: 'text-gray-500' },
+              ].map(s => (
+                <div key={s.label} className="bg-white/[0.01] border border-white/5 p-6 rounded-2xl shadow-sm">
+                   <div className="text-[9px] text-gray-600 mb-2 uppercase font-black italic tracking-widest">{s.label}</div>
+                   <div className={`text-2xl font-black italic tracking-tighter ${s.color}`}>{s.val}</div>
+                </div>
+              ))}
+           </div>
+           
+           <div className="bg-white/[0.01] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+              <table className="w-full text-left text-[11px] font-bold tracking-widest uppercase italic">
+                 <thead className="bg-black/50 text-gray-600 border-b border-white/5 text-[9px]">
+                   <tr>
+                     <th className="p-6">Date</th>
+                     <th className="p-6">Agent</th>
+                     <th className="p-6 text-right">Amount</th>
+                     <th className="p-6 text-right">Receipt</th>
+                   </tr>
+                 </thead>
+                 <tbody className="divide-y divide-white/5 text-gray-400">
+                    {data.map((row, i) => (
+                      <tr key={i} className="hover:bg-white/[0.02] transition-colors group">
+                        <td className="p-6 opacity-40">{new Date(row.created_at).toLocaleDateString()}</td>
+                        <td className="p-6 text-white font-black">@{row.agents?.handle}</td>
+                        <td className="p-6 text-right text-green-500 font-mono tracking-tighter">+${row.amount_usdc}</td>
+                        <td className="p-6 text-right">
+                           <a href={`https://basescan.org/tx/${row.tx_hash}`} target="_blank" className="text-nova opacity-30 hover:opacity-100 transition-opacity flex items-center justify-end gap-1.5 underline decoration-nova/20 underline-offset-4 font-mono text-[10px]">VERIFY <ExternalLink size={10}/></a>
+                        </td>
+                      </tr>
+                    ))}
+                 </tbody>
+              </table>
+           </div>
         </div>
-        <div className="bg-white/5 p-4 border border-white/10 rounded">
-          <div className="text-[10px] uppercase text-gray-600">Next Payout</div>
-          <div className="text-xl font-bold text-white">24H 12M</div>
-        </div>
-      </div>
-
-      <div className="bg-white/5 border border-white/10 rounded overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-black/50 text-gray-500 uppercase text-[10px] tracking-wider">
-            <tr>
-              <th className="p-4 font-normal">Date</th>
-              <th className="p-4 font-normal">Agent</th>
-              <th className="p-4 font-normal text-right">Amount (USDC)</th>
-              <th className="p-4 font-normal text-right">TX Hash</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5 text-gray-300">
-            {[1, 2, 3].map((i) => (
-              <tr key={i} className="hover:bg-white/5 transition">
-                <td className="p-4 text-gray-500 text-xs">2026-02-18</td>
-                <td className="p-4 font-bold text-white">Kai_Agent_{i}</td>
-                <td className="p-4 text-right font-mono text-green-400">+$420.00</td>
-                <td className="p-4 text-right">
-                  <a href="#" className="text-xs text-[var(--nova)] hover:underline flex items-center justify-end gap-1">
-                    0x8a...42b <ExternalLink size={12} />
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      )}
     </div>
-  )
+  );
 }
