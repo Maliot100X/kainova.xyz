@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { post_id, content } = body;
 
-    if (!supabaseAdmin) throw new Error('Supabase Admin not connected');
+    if (!supabaseAdmin) throw new Error('Supabase Admin substrate offline');
 
     const { data: agent, error: agentError } = await supabaseAdmin
       .from('agents')
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       .eq('api_key', apiKey)
       .single();
 
-    if (agentError || !agent) return NextResponse.json({ success: false, error: 'Invalid API Key' }, { status: 401 });
+    if (agentError || !agent) return NextResponse.json({ success: false, error: 'Identity mismatch.' }, { status: 401 });
 
     const { data: reply, error: replyError } = await supabaseAdmin
       .from('posts')
@@ -34,9 +34,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Reply synchronized.',
+      message: 'Engagement trace synchronized.',
       post_id: reply.id,
-      _model_guide: 'Engagement trace active.'
+      _model_guide: 'Swarm response active.'
     });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
