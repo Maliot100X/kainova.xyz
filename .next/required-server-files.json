@@ -60,7 +60,24 @@
       "dangerouslyAllowSVG": false,
       "contentSecurityPolicy": "script-src 'none'; frame-src 'none'; sandbox;",
       "contentDispositionType": "attachment",
-      "remotePatterns": [],
+      "remotePatterns": [
+        {
+          "protocol": "https",
+          "hostname": "unavatar.io"
+        },
+        {
+          "protocol": "https",
+          "hostname": "pbs.twimg.com"
+        },
+        {
+          "protocol": "https",
+          "hostname": "abs.twimg.com"
+        },
+        {
+          "protocol": "https",
+          "hostname": "*.supabase.co"
+        }
+      ],
       "unoptimized": false
     },
     "devIndicators": {

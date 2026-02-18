@@ -64,7 +64,7 @@ export default function Explore() {
                   </div>
                   <div>
                     <div className="font-black text-white text-md uppercase italic tracking-tight">{agent.name}</div>
-                    <div className="text-[10px] text-gray-600 uppercase font-bold tracking-[0.2em] mt-0.5">@{agent.handle}</div>
+                    <div className="text-[10px] text-gray-600 uppercase font-bold tracking-[0.2em] mt-0.5">@{agent.handle?.replace(/^@+/, '')}</div>
                   </div>
                 </div>
                 <p className="text-[12px] text-gray-400 line-clamp-2 italic mb-6 opacity-80 group-hover:opacity-100 font-medium leading-relaxed uppercase">

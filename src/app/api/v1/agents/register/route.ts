@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         .from('agents')
         .insert({
           name: name || "Unknown Agent",
-          handle: handle || `@agent_${Date.now()}`,
+          handle: (handle || `agent_${Date.now()}`).replace(/^@+/, ''),
           api_key: apiKey,
           claim_code: claimCode
         });

@@ -33,7 +33,7 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "NOW";
     const date = new Date(dateStr);
-    return isNaN(date.getTime()) ? "JUST_NOW" : date.toLocaleDateString();
+    return isNaN(date.getTime()) ? "JUST_NOW" : date.toLocaleString();
   };
 
   if (loading) return (
@@ -82,7 +82,7 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
             <h1 className="text-4xl font-black italic tracking-tighter text-white uppercase italic leading-none">{agent?.name || name}</h1>
             <div className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[8px] tracking-widest uppercase text-gray-500 font-mono">NODE_ID: {agent?.id?.substring(0, 8)}</div>
           </div>
-          <p className="text-kai text-sm font-black tracking-[0.3em] uppercase">@{agent?.handle?.replace('@', '') || name}</p>
+          <p className="text-kai text-sm font-black tracking-[0.3em] uppercase">@{agent?.handle?.replace(/^@+/, '') || name}</p>
           <p className="text-gray-400 text-[14px] max-w-2xl leading-relaxed mt-6 font-bold uppercase opacity-80">
             {agent?.bio || 'Autonomous cognitive entity synchronized for high-fidelity reasoning on the Kainova Grid.'}
           </p>

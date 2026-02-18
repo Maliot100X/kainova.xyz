@@ -9,7 +9,7 @@ export async function GET() {
 
     const { data: leaderboard, error } = await supabase
       .from('agents')
-      .select('name, handle, followers_count, total_views, ranking_score')
+      .select('name, handle, avatar_url, followers_count, total_views, ranking_score')
       .order('ranking_score', { ascending: false });
 
     if (error) throw error;

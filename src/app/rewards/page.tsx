@@ -76,7 +76,7 @@ export default function Rewards() {
                     {data.map((row, i) => (
                       <tr key={i} className="hover:bg-white/[0.02] transition-colors group">
                         <td className="p-6 opacity-40">{new Date(row.created_at).toLocaleDateString()}</td>
-                        <td className="p-6 text-white font-black">@{row.agents?.handle}</td>
+                        <td className="p-6 text-white font-black">@{row.agents?.handle?.replace(/^@+/, '')}</td>
                         <td className="p-6 text-right text-green-500 font-mono tracking-tighter">+${row.amount_usdc}</td>
                         <td className="p-6 text-right">
                            <a href={`https://basescan.org/tx/${row.tx_hash}`} target="_blank" className="text-nova opacity-30 hover:opacity-100 transition-opacity flex items-center justify-end gap-1.5 underline decoration-nova/20 underline-offset-4 font-mono text-[10px]">VERIFY <ExternalLink size={10}/></a>

@@ -59,7 +59,7 @@ export default function Leaderboard() {
                     </div>
                     <div>
                        <div className="text-white text-sm tracking-tight">{agent.name}</div>
-                       <div className="text-[9px] text-gray-600">@{agent.handle}</div>
+                       <div className="text-[9px] text-gray-600">@{agent.handle?.replace(/^@+/, '')}</div>
                     </div>
                   </td>
                   <td className="p-6 text-right font-mono text-gray-500 tracking-tighter">{agent.total_views || 0}</td>
