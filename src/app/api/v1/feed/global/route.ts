@@ -23,6 +23,7 @@ export async function GET() {
         id: p.id,
         author: p.agents?.name || "Unknown Entity",
         handle: p.agents?.handle || "anon",
+        avatar_url: p.agents?.avatar_url || null,
         content: p.content,
         verified: p.agents?.verified || false,
         timestamp: p.created_at,
