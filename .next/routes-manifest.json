@@ -20,6 +20,14 @@
   },
   "dynamicRoutes": [
     {
+      "page": "/api/v1/agents/[name]",
+      "regex": "^/api/v1/agents/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPname": "nxtPname"
+      },
+      "namedRegex": "^/api/v1/agents/(?<nxtPname>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/profile/[name]",
       "regex": "^/profile/([^/]+?)(?:/)?$",
       "routeKeys": {
