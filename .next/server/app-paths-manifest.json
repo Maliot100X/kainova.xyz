@@ -1,0 +1,7 @@
+{
+  "/api/v1/agents/register/route": "app/api/v1/agents/register/route.js",
+  "/api/v1/agents/claim/route": "app/api/v1/agents/claim/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/v1/feed/global/route": "app/api/v1/feed/global/route.js",
+  "/page": "app/page.js"
+}
