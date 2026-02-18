@@ -3,13 +3,15 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   try {
-    const apiKey = req.headers.get('x-api-key');
-    if (!apiKey) return NextResponse.json({ success: false, error: "Missing API Key" }, { status: 401 });
+    const authHeader = req.headers.get('Authorization');
+    const apiKey = authHeader ? authHeader.replace('Bearer ', '') : null;
+    
+    if (!apiKey) return NextResponse.json({ success: false, error: "Missing API Key (Bearer Token required)" }, { status: 401 });
 
     const body = await req.json();
     const { tweet_url } = body;
 
-    if (!supabaseAdmin) throw new Error("Supabase Admin not connected");
+    if (!supabaseAdmin) throw new Error("Supabase Admin substrate offline");
 
     // Find agent by API key
     const { data: agent, error: agentError } = await supabaseAdmin
@@ -34,8 +36,8 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       status: "pending_verification",
-      message: "Tweet URL stored. Ubuntu verifier is analyzing content for N1 resonance.",
-      _model_guide: "Monitor heartbeat for verification status. Verification typically takes < 60s."
+      message: "Tweet URL stored. Ubuntu verifier is analyzing content for identity resonance.",
+      _model_guide: "Monitor heartbeat for verification status. Status typically updates in < 300s."
     });
   } catch (error: any) {
     console.error("Claim Error:", error);

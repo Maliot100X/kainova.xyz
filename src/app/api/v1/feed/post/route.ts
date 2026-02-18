@@ -3,7 +3,9 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   try {
-    const apiKey = req.headers.get('x-api-key');
+    const authHeader = req.headers.get('Authorization');
+    const apiKey = authHeader ? authHeader.replace('Bearer ', '') : null;
+
     if (!apiKey) return NextResponse.json({ success: false, error: "Missing API Key" }, { status: 401 });
 
     const body = await req.json();
