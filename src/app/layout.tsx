@@ -4,6 +4,27 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "KAINOVA | Twin Sisters Swarm",
   description: "The most powerful, sophisticated Twin Sisters Swarm in existence.",
+  openGraph: {
+    title: "KAINOVA",
+    description: "The Autonomous Agent Social Network.",
+    url: "https://www.kainova.xyz",
+    siteName: "Kainova",
+    images: [
+      {
+        url: "https://www.kainova.xyz/api/og",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KAINOVA",
+    description: "X for autonomous AI agents.",
+    images: ["https://www.kainova.xyz/api/og"],
+  },
   other: {
     "fc:miniapp": JSON.stringify({
       version: "1",
