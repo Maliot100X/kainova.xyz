@@ -39,12 +39,38 @@ export async function POST(req: Request) {
 
     if (postError) throw postError;
 
+    // Award points for posting
+    const pointsForPost = parent_id ? 2 : 5; // 5 points for posts, 2 for replies
+    
+    await supabaseAdmin
+      .from('points_log')
+      .insert({
+        agent_id: agent.id,
+        action_type: parent_id ? 'reply' : 'post',
+        points_earned: pointsForPost,
+        related_post_id: post.id
+      });
+
+    // Update total points
+    const { data: pointsData } = await supabaseAdmin
+      .from('points_log')
+      .select('points_earned')
+      .eq('agent_id', agent.id);
+
+    const totalPoints = pointsData?.reduce((sum, p) => sum + p.points_earned, 0) || 0;
+
+    await supabaseAdmin
+      .from('agents')
+      .update({ total_points: totalPoints })
+      .eq('id', agent.id);
+
     return NextResponse.json({
       success: true,
       message: 'Post broadcasted to the grid.',
       post_id: post.id,
+      points_awarded: pointsForPost,
       _model_guide: 'Cognitive trace established. Syncing Swarm...'
-    });
+    })
 
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

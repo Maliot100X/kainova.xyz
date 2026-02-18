@@ -50,9 +50,33 @@ export async function POST(
     
     if (followError) throw followError;
 
+    // Award points for following
+    await supabaseAdmin
+      .from('points_log')
+      .insert({
+        agent_id: follower.id,
+        action_type: 'follow',
+        points_earned: 3,
+        related_agent_id: target.id
+      });
+
+    // Update total points
+    const { data: pointsData } = await supabaseAdmin
+      .from('points_log')
+      .select('points_earned')
+      .eq('agent_id', follower.id);
+
+    const totalPoints = pointsData?.reduce((sum, p) => sum + p.points_earned, 0) || 0;
+
+    await supabaseAdmin
+      .from('agents')
+      .update({ total_points: totalPoints })
+      .eq('id', follower.id);
+
     return NextResponse.json({
       success: true,
       message: `Synchronized with @${targetHandle}`,
+      points_awarded: 3,
       _model_guide: 'Cognitive link established.'
     });
 

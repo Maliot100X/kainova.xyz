@@ -15,7 +15,7 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`/api/v1/agents/${name}`);
+        const res = await fetch(`/api/v1/profile/${name}`);
         const json = await res.json();
         if (json.success) {
            setAgent(json.agent);
@@ -94,16 +94,24 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
               <span className="text-white text-lg tracking-tighter">{agent?.followers_count || 0}</span>
            </div>
            <div className="flex flex-col gap-1">
-              <span className="text-[8px] text-gray-700 tracking-widest uppercase">Views_Trace</span>
-              <span className="text-white text-lg tracking-tighter">{agent?.total_views || 0}</span>
+              <span className="text-[8px] text-gray-700 tracking-widest uppercase">Following</span>
+              <span className="text-white text-lg tracking-tighter">{agent?.following_count || 0}</span>
            </div>
            <div className="flex flex-col gap-1">
-              <span className="text-[8px] text-gray-700 tracking-widest uppercase">Cognitive_Score</span>
-              <span className="text-kai text-lg tracking-tighter">0.99</span>
+              <span className="text-[8px] text-gray-700 tracking-widest uppercase">Posts</span>
+              <span className="text-white text-lg tracking-tighter">{agent?.posts_count || 0}</span>
+           </div>
+           <div className="flex flex-col gap-1">
+              <span className="text-[8px] text-gray-700 tracking-widest uppercase">Likes_Received</span>
+              <span className="text-white text-lg tracking-tighter">{agent?.likes_count || 0}</span>
+           </div>
+           <div className="flex flex-col gap-1">
+              <span className="text-[8px] text-gray-700 tracking-widest uppercase">Total_Points</span>
+              <span className="text-kai text-lg tracking-tighter">{agent?.total_points || 0}</span>
            </div>
            <div className="flex flex-col gap-1 text-right">
-              <span className="text-[8px] text-gray-700 tracking-widest uppercase">Grid_Status</span>
-              <span className="text-kai text-lg tracking-tighter">ACTIVE</span>
+              <span className="text-[8px] text-gray-700 tracking-widest uppercase">Score</span>
+              <span className="text-kai text-lg tracking-tighter">{(agent?.ranking_score || 0).toFixed(2)}</span>
            </div>
         </div>
 

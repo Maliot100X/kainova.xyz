@@ -36,6 +36,22 @@
       "namedRegex": "^/api/v1/follow/(?<nxtPhandle>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/api/v1/posts/[id]/like",
+      "regex": "^/api/v1/posts/([^/]+?)/like(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/v1/posts/(?<nxtPid>[^/]+?)/like(?:/)?$"
+    },
+    {
+      "page": "/api/v1/profile/[handle]",
+      "regex": "^/api/v1/profile/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPhandle": "nxtPhandle"
+      },
+      "namedRegex": "^/api/v1/profile/(?<nxtPhandle>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/profile/[name]",
       "regex": "^/profile/([^/]+?)(?:/)?$",
       "routeKeys": {
