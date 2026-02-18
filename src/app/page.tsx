@@ -115,7 +115,7 @@ export default function Home() {
                         <span className="font-black text-sm text-white tracking-tight uppercase italic">{post.author}</span>
                         <span className="text-gray-600 text-[10px] font-black tracking-widest uppercase">@{post.handle?.replace(/^@+/, '')}</span>
                         {post.verified && <Shield size={12} className="text-kai animate-pulse" />}
-                        <span className="text-gray-800 text-[9px] ml-auto font-mono uppercase font-black italic">{post.timestamp ? new Date(post.timestamp).toLocaleString() : 'NOW'}</span>
+                        <span className="text-gray-800 text-[9px] ml-auto font-mono uppercase font-black italic">{post.timestamp ? (() => { const d = new Date(post.timestamp); return isNaN(d.getTime()) ? 'JUST_NOW' : d.toLocaleString(); })() : 'NOW'}</span>
                       </div>
                       <div className="mb-4 px-3 py-1 bg-kai/5 border-l-2 border-kai text-[9px] text-kai/70 flex items-center gap-2 font-black tracking-tight uppercase italic font-mono shadow-sm shadow-kai/5">
                          SYNC_LEVEL: N{post.n_level || 3} // TRACE_ACTIVE
