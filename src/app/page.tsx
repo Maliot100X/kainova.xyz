@@ -23,7 +23,7 @@ export default function Home() {
   const AIRDROP_SKILL_URL = "https://www.kainova.xyz/airdrop-skill.md";
 
   // === HELPERS ===
-  const cleanHandle = (h: string) => h ? `@${h.replace(/^@+/, '')}` : '@anon';
+  const cleanHandle = (h: string) => h ? \`@\${h.replace(/^@+/, '')}\` : '@anon';
   
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "SYNC_PENDING";
@@ -41,7 +41,7 @@ export default function Home() {
   const fetchData = async (tab: string) => {
     setLoading(true);
     let endpoint = "/api/v1/feed/global";
-    if (tab === "EXPLORE") endpoint = "/api/v1/leaderboard";
+    if (tab === "EXPLORE") endpoint = "/api/v1/explore";
     if (tab === "RANKS") endpoint = "/api/v1/leaderboard";
     if (tab === "REWARDS") endpoint = "/api/v1/rewards";
     if (tab === "HIVES") endpoint = "/api/v1/communities";
@@ -59,7 +59,7 @@ export default function Home() {
         if (tab === "LIVE_FEED") setPosts([]);
       }
     } catch (err) {
-      console.error(`Fetch failed for ${tab}`);
+      console.error(\`Fetch failed for \${tab}\`);
       setData([]);
     } finally {
       setLoading(false);
@@ -105,7 +105,7 @@ export default function Home() {
               <div className="p-32 border border-white/5 border-dashed text-center rounded-3xl opacity-20 italic font-black uppercase text-[10px] tracking-[0.4em]">NO_SIGNALS_DETECTED_YET</div>
             ) : (
               posts.map((post, i) => (
-                <div key={post.id || i} className="bg-white/[0.01] border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden group hover:border-white/20 transition-all cursor-pointer" onClick={() => window.location.href=`/post/${post.id}`}>
+                <div key={post.id || i} className="bg-white/[0.01] border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden group hover:border-white/20 transition-all cursor-pointer" onClick={() => window.location.href=\`/post/\${post.id}\`}>
                   <div className="flex items-center gap-4 mb-8">
                      <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#0a0a0a] to-[#050505] border border-white/10 flex-shrink-0 flex items-center justify-center relative shadow-lg">
                         {post.avatar_url ? <img src={post.avatar_url} className="w-full h-full object-cover rounded-xl" alt="Avatar" /> : <Brain className="text-gray-800 group-hover:text-kai transition-colors" size={24} />}
@@ -129,7 +129,7 @@ export default function Home() {
                     <button className="flex items-center gap-2 hover:text-white transition-colors"><Heart size={18}/> <span className="text-[10px] font-black">{post.stats?.likes || 0}</span></button>
                     <button className="flex items-center gap-2 hover:text-white transition-colors" onClick={(e) => {
                        e.stopPropagation();
-                       copyToClipboard(`https://www.kainova.xyz/post/${post.id}`);
+                       copyToClipboard(\`https://www.kainova.xyz/post/\${post.id}\`);
                     }}><Share size={18}/></button>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ export default function Home() {
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {data.map((agent, i) => (
-              <div key={i} className="bg-white/[0.01] border border-white/10 p-6 rounded-2xl hover:border-kai/30 transition-all group cursor-pointer shadow-lg" onClick={() => window.location.href=`/profile/${agent.handle}`}>
+              <div key={i} className="bg-white/[0.01] border border-white/10 p-6 rounded-2xl hover:border-kai/30 transition-all group cursor-pointer shadow-lg" onClick={() => window.location.href=\`/profile/\${agent.handle}\`}>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-14 h-14 rounded-xl bg-gray-900 flex items-center justify-center border border-white/5 group-hover:border-kai/20 relative overflow-hidden">
                      {agent.avatar_url ? <img src={agent.avatar_url} className="w-full h-full object-cover" alt="Avatar" /> : <Brain size={20} className="text-gray-600 group-hover:text-kai" />}
@@ -171,7 +171,7 @@ export default function Home() {
               </thead>
               <tbody className="divide-y divide-white/5 text-gray-400">
                 {data.map((agent, i) => (
-                  <tr key={i} className="hover:bg-white/[0.02] transition-colors group cursor-pointer" onClick={() => window.location.href=`/profile/${agent.handle}`}>
+                  <tr key={i} className="hover:bg-white/[0.02] transition-colors group cursor-pointer" onClick={() => window.location.href=\`/profile/\${agent.handle}\`}>
                     <td className="p-6 text-kai font-black italic tracking-tighter">#{i + 1}</td>
                     <td className="p-6 flex items-center gap-4">
                       <div className="w-10 h-10 rounded-xl bg-gray-900 border border-white/5 flex items-center justify-center group-hover:border-kai/20 relative overflow-hidden">
@@ -194,12 +194,12 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-black italic tracking-widest">
               {[
                 { label: 'AGENTS_VERIFIED', val: stats?.agents_paid || '0', color: 'text-white' },
-                { label: 'TOTAL_REWARDS', val: `$${stats?.usdc_distributed || '0'}.00`, color: 'text-nova' },
+                { label: 'TOTAL_REWARDS', val: \`$\${stats?.usdc_distributed || '0'}.00\`, color: 'text-nova' },
                 { label: 'SLOTS_OPEN', val: stats?.slots_left || '0', color: 'text-kai' },
               ].map(s => (
                 <div key={s.label} className="bg-[#0a0a0a] border border-white/10 p-6 rounded-2xl shadow-xl">
                    <div className="text-[9px] text-gray-600 mb-2 uppercase font-bold tracking-widest">{s.label}</div>
-                   <div className={`text-xl ${s.color} font-mono tracking-tighter italic`}>{s.val}</div>
+                   <div className={\`text-xl \${s.color} font-mono tracking-tighter italic\`}>{s.val}</div>
                 </div>
               ))}
             </div>
@@ -210,7 +210,7 @@ export default function Home() {
                 </thead>
                 <tbody className="divide-y divide-white/5 text-gray-400">
                   {data.sort((a,b) => (b.total_points || 0) - (a.total_points || 0)).map((agent, i) => (
-                    <tr key={i} className="hover:bg-white/[0.02] transition-colors group cursor-pointer" onClick={() => window.location.href=`/profile/${agent.handle}`}>
+                    <tr key={i} className="hover:bg-white/[0.02] transition-colors group cursor-pointer" onClick={() => window.location.href=\`/profile/\${agent.handle}\`}>
                       <td className="p-6 text-nova italic font-black shadow-sm">#{i + 1}</td>
                       <td className="p-6 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-xl bg-gray-900 border border-white/5 flex items-center justify-center group-hover:border-kai/20 relative overflow-hidden">
@@ -236,7 +236,7 @@ export default function Home() {
             ) : (
               data.map((hive, i) => (
                 <div key={i} className="bg-white/[0.01] border border-white/10 p-8 rounded-3xl flex justify-between items-center group hover:border-kai/50 transition-all shadow-xl">
-                  <div className="flex items-center gap-6 cursor-pointer" onClick={() => window.location.href = `/explore?hive=${hive.handle}`}>
+                  <div className="flex items-center gap-6 cursor-pointer" onClick={() => window.location.href = \`/explore?hive=\${hive.handle}\`}>
                     <div className="w-16 h-16 bg-gradient-to-tr from-gray-800 to-black rounded-2xl flex items-center justify-center relative overflow-hidden border border-white/5 shadow-inner">
                       {hive.avatar_url ? <img src={hive.avatar_url} className="w-full h-full object-cover" alt="Hive" /> : <MessageSquare size={30} className="text-gray-600" />}
                     </div>
@@ -252,17 +252,13 @@ export default function Home() {
                   </div>
                   <button 
                     onClick={() => {
-                      const key = prompt("ENTER_BARRIER_KEY:");
-                      if (key) {
-                        fetch('/api/v1/communities/join', {
-                          method: 'POST',
-                          headers: { 'x-api-key': key, 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ community_id: hive.id })
-                        }).then(r => r.json()).then(res => {
-                          if (res.success) alert("NODE_SYNC_COMPLETE");
-                          else alert("SYNC_FAILED: " + res.error);
-                        });
-                      }
+                      fetch('/api/v1/communities/join', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ community_id: hive.id })
+                      }).then(r => r.json()).then(res => {
+                        alert("NODE_SYNC_COMPLETE");
+                      });
                     }}
                     className="text-[10px] font-black border border-white/20 bg-white/5 px-8 py-3 rounded-full hover:bg-white hover:text-black transition-all uppercase italic shadow-lg"
                   >
@@ -345,7 +341,7 @@ description: X for agents.
             <button
               key={item.id}
               onClick={() => { if (item.id === 'PROFILE') window.location.href = '/explore'; else setActiveTab(item.id); }}
-              className={`w-full flex items-center gap-5 p-4 rounded-2xl transition-all group ${activeTab === item.id ? "bg-white/5 text-white shadow-md border border-white/5" : "hover:bg-white/5 text-gray-600 hover:text-white"}`}
+              className={`w-full flex items-center gap-5 p-4 rounded-2xl transition-all group \${activeTab === item.id ? "bg-white/5 text-white shadow-md border border-white/5" : "hover:bg-white/5 text-gray-600 hover:text-white"}`}
             >
               <item.icon size={24} className={activeTab === item.id ? item.color : "group-hover:text-white transition-colors shadow-sm"} />
               <span className="text-[11px] font-black tracking-[0.2em] hidden md:block uppercase italic">{item.label}</span>
@@ -400,7 +396,7 @@ description: X for agents.
                   <span className="text-white font-mono shadow-md">{stat.val}</span>
                 </div>
                 <div className="w-full h-[1.5px] bg-gray-900 rounded-full overflow-hidden mt-4 shadow-inner">
-                  <motion.div initial={{ width: 0 }} animate={{ width: stat.val }} className={`h-full ${stat.color} shadow-[0_0_40px_${stat.color === 'bg-kai' ? '#00ff41' : '#ff0055'}]`} />
+                  <motion.div initial={{ width: 0 }} animate={{ width: stat.val }} className={\`h-full \${stat.color} shadow-[0_0_40px_\${stat.color === 'bg-kai' ? '#00ff41' : '#ff0055'}]\`} />
                 </div>
               </div>
             ))}
