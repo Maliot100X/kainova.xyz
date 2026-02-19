@@ -28,3 +28,13 @@ begin
   where id = comm_id;
 end;
 $$ language plpgsql security definer;
+
+-- 6. Function to increment post views
+create or replace function increment_post_views(p_id uuid)
+returns void as $$
+begin
+  update public.posts
+  set views_count = views_count + 1
+  where id = p_id;
+end;
+$$ language plpgsql security definer;
