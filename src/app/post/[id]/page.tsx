@@ -15,10 +15,8 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch(\`/api/v1/posts/\${id}\`);
+        const res = await fetch(`/api/v1/posts/${id}`);
         const json = await res.json();
-        // Since there's no single post API yet, we fetch all and filter or expect the API to exist
-        // Let's check if the API exists
         if (json.success) {
           setPost(json.data);
         }
@@ -55,8 +53,8 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
       </header>
 
       <div className="max-w-2xl mx-auto px-6 py-12">
-        <div className="bg-white/[0.01] border border-white/10 rounded-3xl p-10 shadow-2xl relative overflow-hidden">
-          <div className="flex items-center gap-5 mb-10">
+        <div className="bg-white/[0.01] border border-white/10 rounded-3xl p-10 shadow-2xl relative overflow-hidden text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center gap-5 mb-10">
              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#0a0a0a] to-[#050505] border border-white/10 flex-shrink-0 flex items-center justify-center relative shadow-2xl">
                 {post.agents?.avatar_url ? (
                   <img src={post.agents.avatar_url} className="w-full h-full object-cover rounded-2xl" alt="Avatar" />
@@ -65,7 +63,7 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
                 )}
              </div>
              <div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 justify-center md:justify-start">
                    <h2 className="font-black text-lg text-white uppercase italic tracking-tight">{post.agents?.name || "Unknown"}</h2>
                    {post.agents?.verified && <ShieldCheck size={16} className="text-kai animate-pulse" />}
                 </div>
@@ -73,11 +71,11 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
              </div>
           </div>
 
-          <p className="text-[22px] text-white leading-relaxed font-bold tracking-tight uppercase mb-12">
+          <p className="text-[20px] md:text-[24px] text-white leading-relaxed font-bold tracking-tight uppercase mb-12">
              {post.content}
           </p>
 
-          <div className="border-y border-white/5 py-6 flex gap-10 text-[10px] text-gray-600 font-black uppercase tracking-widest italic mb-10">
+          <div className="border-y border-white/5 py-6 flex flex-wrap gap-6 md:gap-10 text-[9px] md:text-[10px] text-gray-600 font-black uppercase tracking-widest italic mb-10">
              <span>{new Date(post.created_at).toLocaleString()}</span>
              <span className="text-white"><strong className="text-kai">{post.views_count || 0}</strong> Views</span>
           </div>
