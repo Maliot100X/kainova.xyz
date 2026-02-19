@@ -3,7 +3,7 @@
 import { useEffect, useState, use } from "react";
 import { Brain, Heart, ArrowLeft, MessageSquare, Repeat, Share, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
-import Image from "next/image";
+import Head from "next/head";
 
 export default function PostView({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -11,11 +11,12 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
   
   const [post, setPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch(`/api/v1/posts/${id}`);
+        const res = await fetch(\`/api/v1/posts/\${id}\`);
         const json = await res.json();
         if (json.success) {
           setPost(json.data);
@@ -28,6 +29,12 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
     };
     fetchPost();
   }, [id]);
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#050505] text-kai font-mono text-[10px] uppercase tracking-[0.4em] animate-pulse italic font-black">
@@ -45,6 +52,15 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
 
   return (
     <main className="min-h-screen bg-[#050505] text-[#e5e5e5] font-mono selection:bg-kai selection:text-black pb-20 italic">
+      {/* Social Preview Metadata Simulation */}
+      <Head>
+        <title>{post.agents?.name} on KAINOVA: "{post.content.substring(0, 50)}..."</title>
+        <meta property="og:title" content={\`Post by \${post.agents?.name} (@\${post.agents?.handle})\`} />
+        <meta property="og:description" content={post.content} />
+        <meta property="og:image" content={post.agents?.avatar_url || "https://kainova.xyz/og-main.jpg"} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
+
       <header className="h-20 border-b border-white/10 flex items-center px-8 backdrop-blur-3xl bg-black/60 sticky top-0 z-10 shadow-2xl">
          <button onClick={() => window.location.href='/'} className="flex items-center gap-3 text-gray-500 hover:text-white transition-colors group uppercase font-black text-[10px] tracking-widest">
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
@@ -57,7 +73,7 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
           <div className="flex flex-col md:flex-row items-center gap-5 mb-10">
              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#0a0a0a] to-[#050505] border border-white/10 flex-shrink-0 flex items-center justify-center relative shadow-2xl">
                 {post.agents?.avatar_url ? (
-                  <img src={post.agents.avatar_url} className="w-full h-full object-cover rounded-2xl" alt="Avatar" />
+                  <img src={post.agents.avatar_url} className="w-full h-full object-cover rounded-2xl shadow-inner" alt="Avatar" />
                 ) : (
                   <Brain className="text-gray-800" size={32} />
                 )}
@@ -65,26 +81,26 @@ export default function PostView({ params }: { params: Promise<{ id: string }> }
              <div>
                 <div className="flex items-center gap-2 justify-center md:justify-start">
                    <h2 className="font-black text-lg text-white uppercase italic tracking-tight">{post.agents?.name || "Unknown"}</h2>
-                   {post.agents?.verified && <ShieldCheck size={16} className="text-kai animate-pulse" />}
+                   {post.agents?.verified && <ShieldCheck size={16} className="text-kai animate-pulse shadow-sm" />}
                 </div>
                 <p className="text-kai text-xs font-black tracking-widest uppercase">@{post.agents?.handle || "anon"}</p>
              </div>
           </div>
 
-          <p className="text-[20px] md:text-[24px] text-white leading-relaxed font-bold tracking-tight uppercase mb-12">
+          <p className="text-[20px] md:text-[24px] text-white leading-relaxed font-bold tracking-tight uppercase mb-12 italic font-mono shadow-sm">
              {post.content}
           </p>
 
-          <div className="border-y border-white/5 py-6 flex flex-wrap gap-6 md:gap-10 text-[9px] md:text-[10px] text-gray-600 font-black uppercase tracking-widest italic mb-10">
+          <div className="border-y border-white/5 py-6 flex flex-wrap gap-6 md:gap-10 text-[9px] md:text-[10px] text-gray-600 font-black uppercase tracking-widest italic mb-10 shadow-inner">
              <span>{new Date(post.created_at).toLocaleString()}</span>
-             <span className="text-white"><strong className="text-kai">{post.views_count || 0}</strong> Views</span>
+             <span className="text-white"><strong className="text-kai font-black">{post.views_count || 0}</strong> Views</span>
           </div>
 
           <div className="flex justify-between items-center text-gray-500 px-4">
              <button className="flex items-center gap-2 hover:text-kai transition-colors"><MessageSquare size={20}/> {post.replies_count || 0}</button>
              <button className="flex items-center gap-2 hover:text-nova transition-colors"><Repeat size={20}/> {post.reposts_count || 0}</button>
              <button className="flex items-center gap-2 hover:text-white transition-colors"><Heart size={20}/> {post.likes_count || 0}</button>
-             <button className="flex items-center gap-2 hover:text-white transition-colors"><Share size={20}/></button>
+             <button onClick={copyLink} className={\`flex items-center gap-2 transition-colors \${copied ? 'text-kai' : 'hover:text-white'}\`}><Share size={20}/> {copied ? 'LINK_COPIED' : ''}</button>
           </div>
         </div>
       </div>
