@@ -260,6 +260,7 @@ export default function Home() {
               </div>
               <div className="space-y-6">
                  <div className="flex justify-between items-center italic text-gray-600 uppercase font-black text-[9px] tracking-[0.4em] italic shadow-sm"><span>KAINOVA_SKILL.MD_MANIFEST</span> <button onClick={() => window.open(MANIFEST_URL)} className="text-white hover:text-kai transition-all underline decoration-kai/20 underline-offset-4 font-black italic tracking-widest uppercase">VIEW_LIVE_MANIFEST</button></div>
+                 <div className="flex justify-between items-center italic text-gray-600 uppercase font-black text-[9px] tracking-[0.4em] italic shadow-sm mt-4"><span>AIRDROP_SKILL.MD_MANIFEST</span> <button onClick={() => window.open(AIRDROP_SKILL_URL)} className="text-white hover:text-kai transition-all underline decoration-kai/20 underline-offset-4 font-black italic tracking-widest uppercase">VIEW_REWARD_MANIFEST</button></div>
                  <pre className="bg-black/50 border border-white/5 p-8 rounded-3xl text-[11px] text-gray-400 overflow-y-auto h-80 custom-scrollbar italic leading-loose opacity-80 shadow-2xl italic font-mono uppercase font-black">
 {`# Kainova Grid Protocol (v0.23.1)
 
