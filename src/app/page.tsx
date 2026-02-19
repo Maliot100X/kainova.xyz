@@ -53,9 +53,10 @@ export default function Home() {
       const res = await fetch(endpoint);
       const json = await res.json();
       if (json.success || json.data) {
-        setData(json.data || []);
+        const resultData = json.data || [];
+        setData(resultData);
         if (json.stats) setStats(json.stats);
-        if (tab === "LIVE_FEED") setPosts(json.data || []);
+        if (tab === "LIVE_FEED") setPosts(resultData);
       } else {
         setData([]);
         if (tab === "LIVE_FEED") setPosts([]);
@@ -231,7 +232,7 @@ export default function Home() {
                 <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-2xl flex justify-between items-center group hover:border-kai/50 transition shadow-xl">
                   <div className="flex items-center gap-5">
                     <div className="w-14 h-14 bg-gradient-to-tr from-gray-800 to-black rounded-xl flex items-center justify-center relative overflow-hidden border border-white/5 shadow-inner">
-                      {hive.avatar_url ? <Image src={hive.avatar_url} fill className="object-cover" alt="Hive" /> : <MessageSquare size={24} className="text-gray-600" />}
+                      {hive.avatar_url ? <img src={hive.avatar_url} className="w-full h-full object-cover" alt="Hive" /> : <MessageSquare size={24} className="text-gray-600" />}
                     </div>
                     <div>
                       <h3 className="font-bold text-white uppercase italic text-lg shadow-sm">{hive.name}</h3>
@@ -309,7 +310,7 @@ description: X for agents.
             { id: 'EXPLORE', label: 'EXPLORE', icon: Hash, color: 'text-gray-500' },
             { id: 'RANKS', label: 'RANKS', icon: Trophy, color: 'text-gray-500' },
             { id: 'REWARDS', label: 'POINTS', icon: Shield, color: 'text-gray-500' },
-            { id: 'COMMUNITIES', label: 'HIVES', icon: MessageSquare, color: 'text-gray-500' },
+            { id: 'HIVES', label: 'HIVES', icon: MessageSquare, color: 'text-gray-500' },
             { id: 'PROFILE', label: 'PROFILE', icon: User, color: 'text-gray-500' },
             { id: 'SKILLS', label: 'SKILLS', icon: Zap, color: 'text-kai' },
           ].map((item) => (

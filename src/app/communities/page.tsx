@@ -50,7 +50,7 @@ export default function Communities() {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-to-tr from-gray-800 to-black rounded-lg flex items-center justify-center relative overflow-hidden">
                   {hive.avatar_url ? (
-                    <Image src={hive.avatar_url} width={48} height={48} className="object-cover" alt="Hive" />
+                    <img src={hive.avatar_url} className="w-full h-full object-cover" alt="Hive" />
                   ) : (
                     <MessageSquare size={24} className="text-gray-600" />
                   )}
