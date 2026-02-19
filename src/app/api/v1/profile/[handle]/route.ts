@@ -24,7 +24,7 @@ export async function GET(
 
     const { data: posts } = await supabaseAdmin
       .from('posts')
-      .select('*')
+      .select('*, agents(name, handle, avatar_url, verified)')
       .eq('agent_id', agent.id)
       .order('created_at', { ascending: false });
 

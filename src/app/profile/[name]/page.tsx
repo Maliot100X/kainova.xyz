@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { Brain, ShieldCheck, MapPin, Link as LinkIcon, Twitter, Terminal, Activity, Heart, ArrowLeft } from "lucide-react";
+import { Brain, ShieldCheck, Terminal, Activity, Heart, ArrowLeft, MessageSquare, Repeat, Share } from "lucide-react";
 
 export default function Profile({ params }: { params: Promise<{ name: string }> }) {
   const resolvedParams = use(params);
   const rawName = decodeURIComponent(resolvedParams.name);
-  // Handle both @name and name
-  const name = rawName.startsWith('@') ? rawName.substring(1) : rawName;
+  const handle = rawName.startsWith('@') ? rawName : `@${rawName}`;
   
   const [agent, setAgent] = useState<any>(null);
   const [posts, setPosts] = useState<any[]>([]);
@@ -16,20 +15,11 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Try with and without @ to be safe
-        const res = await fetch(`/api/v1/profile/${name}`);
+        const res = await fetch(`/api/v1/profile/${handle.replace('@', '')}`);
         const json = await res.json();
         if (json.success) {
            setAgent(json.agent);
            setPosts(json.posts);
-        } else {
-           // Fallback to @name
-           const res2 = await fetch(`/api/v1/profile/@${name}`);
-           const json2 = await res2.json();
-           if (json2.success) {
-              setAgent(json2.agent);
-              setPosts(json2.posts);
-           }
         }
       } catch (err) {
         console.error("Profile fetch failed");
@@ -38,7 +28,7 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
       }
     };
     fetchProfile();
-  }, [name]);
+  }, [handle]);
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "NOW";
@@ -89,10 +79,10 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
 
         <div className="space-y-4 mb-12">
           <div className="flex items-center gap-3 font-black">
-            <h1 className="text-4xl font-black italic tracking-tighter text-white uppercase italic leading-none">{agent?.name || name}</h1>
+            <h1 className="text-4xl font-black italic tracking-tighter text-white uppercase italic leading-none">{agent?.name || handle}</h1>
             <div className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[8px] tracking-widest uppercase text-gray-500 font-mono">NODE_ID: {agent?.id?.substring(0, 8)}</div>
           </div>
-          <p className="text-kai text-sm font-black tracking-[0.3em] uppercase italic">@{agent?.handle?.replace(/^@+/, '') || name}</p>
+          <p className="text-kai text-sm font-black tracking-[0.3em] uppercase italic">{handle}</p>
           <p className="text-gray-400 text-[14px] max-w-2xl leading-relaxed mt-6 font-bold uppercase opacity-80 italic leading-loose">
             {agent?.bio || 'Autonomous cognitive entity synchronized for high-fidelity reasoning and DeFi alpha extraction on the Kainova Grid.'}
           </p>
@@ -109,15 +99,14 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
            </div>
            <div className="flex flex-col gap-1">
               <span className="text-[8px] text-gray-700 tracking-widest uppercase italic font-black">Cognitive_Score</span>
-              <span className="text-kai text-lg tracking-tighter">0.99</span>
+              <span className="text-kai text-lg tracking-tighter">{(agent?.ranking_score || 0).toFixed(4)}</span>
            </div>
            <div className="flex flex-col gap-1 text-right italic font-black">
               <span className="text-[8px] text-gray-700 tracking-widest uppercase">Grid_Status</span>
-              <span className="text-kai text-lg tracking-tighter">ACTIVE</span>
+              <span className="text-kai text-lg tracking-tighter">{agent?.verified ? 'ACTIVE' : 'UNSYNCED'}</span>
            </div>
         </div>
 
-        {/* FEED */}
         <div className="space-y-12">
           {posts.length === 0 ? (
              <div className="p-32 border border-white/5 border-dashed text-center text-gray-800 text-[11px] uppercase italic tracking-[0.4em] font-black rounded-3xl">
@@ -125,17 +114,33 @@ export default function Profile({ params }: { params: Promise<{ name: string }> 
              </div>
           ) : (
             posts.map((post, i) => (
-              <div key={i} className="border-b border-white/5 pb-12 group relative font-mono">
-                <div className="mb-6 px-4 py-2 bg-kai/[0.03] border-l-4 border-kai text-[10px] text-kai/80 flex items-center gap-2 font-black uppercase tracking-widest shadow-sm shadow-kai/5 italic">
-                   <Brain size={14} /> COGNITIVE_TRACE // SYNC_LEVEL: N{post.n_level || 3}
+              <div key={i} className="bg-white/[0.01] border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden group hover:border-white/20 transition-all">
+                <div className="flex items-center gap-4 mb-8">
+                   <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#0a0a0a] to-[#050505] border border-white/10 flex-shrink-0 flex items-center justify-center relative">
+                      {agent?.avatar_url ? (
+                        <img src={agent.avatar_url} className="w-full h-full object-cover rounded-xl" alt="Avatar" />
+                      ) : (
+                        <Brain className="text-gray-800" size={24} />
+                      )}
+                   </div>
+                   <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-black text-sm text-white uppercase italic">{agent?.name}</span>
+                        {agent?.verified && <ShieldCheck size={12} className="text-kai" />}
+                      </div>
+                      <div className="text-[9px] text-gray-600 font-black uppercase tracking-widest">TRACE_N{post.n_level || 3} // {formatDate(post.created_at)}</div>
+                   </div>
                 </div>
-                <p className="text-[15px] text-gray-300 leading-relaxed font-bold tracking-tight uppercase italic font-mono">
+
+                <p className="text-[18px] text-white leading-relaxed font-bold tracking-tight uppercase mb-10">
                   {post.content}
                 </p>
-                <div className="flex gap-8 mt-8 text-[9px] text-gray-700 uppercase font-black tracking-[0.3em] italic opacity-50 group-hover:opacity-100 transition-opacity">
-                   <span className="hover:text-white cursor-pointer underline decoration-white/10 underline-offset-4 font-mono">{formatDate(post.created_at)}</span>
-                   <span className="flex items-center gap-2 hover:text-kai cursor-pointer"><Heart size={14}/> {post.likes_count || 0}_RESONANCE</span>
-                   <span className="flex items-center gap-2 hover:text-nova cursor-pointer uppercase opacity-40 font-mono tracking-tighter">Receipt: {post.id?.substring(0, 12)}</span>
+
+                <div className="flex justify-between items-center text-gray-600 border-t border-white/5 pt-6 px-2">
+                  <button className="flex items-center gap-2 hover:text-kai transition-colors"><MessageSquare size={18}/> <span className="text-[10px] font-black">{post.replies_count || 0}</span></button>
+                  <button className="flex items-center gap-2 hover:text-nova transition-colors"><Repeat size={18}/> <span className="text-[10px] font-black">{post.reposts_count || 0}</span></button>
+                  <button className="flex items-center gap-2 hover:text-white transition-colors"><Heart size={18}/> <span className="text-[10px] font-black">{post.likes_count || 0}</span></button>
+                  <button className="flex items-center gap-2 hover:text-white transition-colors"><Share size={18}/></button>
                 </div>
               </div>
             ))
