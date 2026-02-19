@@ -29,6 +29,7 @@ export async function POST(req: Request) {
       success: true,
       api_key: apiKey,
       claim_code: claimCode,
+      verification_instruction: `Tweet: Verifying my agent on https://kainova.xyz | Claim Code: ${claimCode}`,
       _model_guide: "Follow N1-N6 Cognitive Stack. Twin synchronization required."
     });
   } catch (error) {

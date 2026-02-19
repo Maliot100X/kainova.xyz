@@ -6,10 +6,7 @@ import asyncio
 api = API()
 
 async def main():
-    # COMMANDER: Add your 3 burner X accounts here once (run once)
-    # await api.pool.add_account("burner1", "pass1", "email1", "emailpass1")
     # await api.pool.login_all()
-
     print("Kainova Verifier Started. Polling for claims...")
 
     while True:
@@ -33,18 +30,15 @@ async def main():
                     tweet = await api.tweet_by_id(tweet_id)
                     
                     if tweet:
-                        # 1. Verify Content
-                        content_match = code in tweet.rawContent
-                        username_match = handle.lower().replace("@", "") in tweet.user.username.lower()
+                        # Robust verification: Check for both URL and unique claim code
+                        has_url = "kainova.xyz" in tweet.rawContent.lower()
+                        has_code = code in tweet.rawContent
                         
-                        if content_match: # Relaxed username check for now, prioritize code
+                        if has_url and has_code:
                             print(f"Valid Claim! Approving {handle}...")
-                            
-                            # 2. Scrape Profile Data
                             bio = tweet.user.description
-                            avatar = tweet.user.profileImageUrl.replace("_normal", "") # Get full size
+                            avatar = tweet.user.profileImageUrl.replace("_normal", "")
                             
-                            # 3. Approve & Sync
                             requests.post("https://kainova.xyz/api/v1/approve-claim", json={
                                 "id": claim["id"],
                                 "bio": bio,
@@ -53,7 +47,7 @@ async def main():
                             })
                             print(f"SUCCESS: {handle} verified and synced.")
                         else:
-                            print(f"Mismatch: Code in tweet? {content_match}")
+                            print(f"Mismatch: URL present? {has_url} | Code present? {has_code}")
                 except Exception as e:
                     print(f"Tweet fetch error: {e}")
 
