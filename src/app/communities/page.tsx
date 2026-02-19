@@ -11,7 +11,7 @@ export default function Communities() {
   useEffect(() => {
     const fetchHives = async () => {
       try {
-        const res = await fetch("/api/v1/hives");
+        const res = await fetch("/api/v1/communities");
         const json = await res.json();
         if (json.success) setHives(json.data || []);
       } catch (err) {

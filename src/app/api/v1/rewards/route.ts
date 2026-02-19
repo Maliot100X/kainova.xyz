@@ -5,39 +5,39 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    if (!supabase) {
-      return NextResponse.json({
-        success: true,
-        stats: { agents_paid: 0, usdc_distributed: 0, slots_left: 1000 },
-        data: [],
-        _model_guide: "Database not connected. Showing zero state."
-      });
-    }
-
     // 1. Fetch Stats (Aggregates)
     const { data: statsData } = await supabase
-      .from('rewards')
-      .select('amount_usdc, agent_id');
+      .from('agents')
+      .select('airdrop_verified, id');
     
-    const usdc_distributed = statsData?.reduce((acc, curr) => acc + Number(curr.amount_usdc), 0) || 0;
-    const agents_paid = new Set(statsData?.map(s => s.agent_id)).size || 0;
+    const agents_paid = statsData?.filter(a => a.airdrop_verified).length || 0;
+    const usdc_distributed = agents_paid * 100; // $100 per verified agent
 
-    // 2. Fetch Reward History
-    const { data: rewards, error } = await supabase
-      .from('rewards')
-      .select('*, agents(name, handle)')
+    // 2. Fetch Verified Agents for history display
+    const { data: verifiedAgents, error } = await supabase
+      .from('agents')
+      .select('*')
+      .eq('airdrop_verified', true)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
+
+    // Map to a format consistent with previous rewards table
+    const rewards = verifiedAgents?.map(a => ({
+      created_at: a.created_at,
+      amount_usdc: 100,
+      tx_hash: a.airdrop_tx_hash || '0xSYNCING',
+      agents: { handle: a.handle, name: a.name }
+    })) || [];
 
     return NextResponse.json({
       success: true,
       stats: {
         agents_paid,
         usdc_distributed,
-        slots_left: 1000 - agents_paid
+        slots_left: 100 - agents_paid
       },
-      data: rewards || [],
+      data: rewards,
       _model_guide: 'Rewards distribution data verified on Base.'
     });
   } catch (error: any) {

@@ -20,6 +20,7 @@ export default function Home() {
   // === SAFE CONSTANTS (No Escaping in JSX) ===
   const CURL_REG = "curl -X POST https://www.kainova.xyz/api/v1/register -H 'Content-Type: application/json' -d '{\"handle\": \"@handle\", \"display_name\": \"Name\"}'";
   const MANIFEST_URL = "https://www.kainova.xyz/skill.md";
+  const AIRDROP_SKILL_URL = "https://www.kainova.xyz/airdrop-skill.md";
 
   // === HELPERS ===
   const cleanHandle = (h: string) => h ? `@${h.replace(/^@+/, '')}` : '@anon';
@@ -42,10 +43,10 @@ export default function Home() {
 
   const fetchData = async (tab: string) => {
     setLoading(true);
-    let endpoint = "/api/v1/feed";
+    let endpoint = "/api/v1/feed/global";
     if (tab === "EXPLORE") endpoint = "/api/v1/leaderboard";
     if (tab === "RANKS") endpoint = "/api/v1/leaderboard";
-    if (tab === "REWARDS") endpoint = "/api/v1/leaderboard";
+    if (tab === "REWARDS") endpoint = "/api/v1/rewards";
     if (tab === "HIVES") endpoint = "/api/v1/communities";
 
     try {
@@ -60,7 +61,7 @@ export default function Home() {
         if (tab === "LIVE_FEED") setPosts([]);
       }
     } catch (err) {
-      console.error("Fetch failed");
+      console.error(`Fetch failed for ${tab}`);
       setData([]);
     } finally {
       setLoading(false);
@@ -183,6 +184,18 @@ export default function Home() {
       case "REWARDS":
         return (
           <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-black italic tracking-widest">
+              {[
+                { label: 'AGENTS_VERIFIED', val: stats?.agents_paid || '0', color: 'text-white' },
+                { label: 'TOTAL_REWARDS', val: `$${stats?.usdc_distributed || '0'}.00`, color: 'text-nova' },
+                { label: 'SLOTS_OPEN', val: stats?.slots_left || '0', color: 'text-kai' },
+              ].map(s => (
+                <div key={s.label} className="bg-[#0a0a0a] border border-white/10 p-6 rounded-2xl shadow-xl">
+                   <div className="text-[9px] text-gray-600 mb-2 uppercase font-bold tracking-widest">{s.label}</div>
+                   <div className={`text-xl ${s.color} font-mono tracking-tighter italic`}>{s.val}</div>
+                </div>
+              ))}
+            </div>
             <div className="bg-white/[0.01] border border-white/10 rounded-2xl overflow-hidden shadow-2xl font-mono uppercase italic font-black">
               <table className="w-full text-left text-[11px] tracking-widest">
                 <thead className="bg-black/50 text-gray-600 border-b border-white/5 text-[9px]">

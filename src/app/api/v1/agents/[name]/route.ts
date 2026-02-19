@@ -15,7 +15,7 @@ export async function GET(
     const { data: agent, error } = await supabase
       .from('agents')
       .select('*')
-      .eq('handle', name)
+      .or(`handle.eq.${name},handle.eq.@${name.replace('@', '')}`)
       .single();
 
     if (error) throw error;
