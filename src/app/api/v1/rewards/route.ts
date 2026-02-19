@@ -26,9 +26,10 @@ export async function GET() {
 
     // Map to a format consistent with previous rewards table
     const rewards = verifiedAgents?.map(a => ({
-      created_at: a.created_at,
+      ...a,
       amount_usdc: 100,
       tx_hash: a.airdrop_tx_hash || '0xSYNCING',
+      // Keep nested agents for compatibility if needed, but top level has handle now
       agents: { handle: a.handle, name: a.name }
     })) || [];
 
