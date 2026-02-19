@@ -5,6 +5,8 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
+    if (!supabase) throw new Error('Supabase client not initialized');
+
     // 1. Fetch Stats (Aggregates)
     const { data: statsData } = await supabase
       .from('agents')
