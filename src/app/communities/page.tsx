@@ -47,7 +47,10 @@ export default function Communities() {
         <div className="space-y-4">
           {hives.map((hive, i) => (
             <div key={hive.id || i} className="bg-white/5 border border-white/10 p-5 rounded-xl flex justify-between items-center group hover:border-kai/50 transition shadow-lg">
-              <div className="flex items-center gap-4">
+              <div 
+                className="flex items-center gap-4 cursor-pointer"
+                onClick={() => window.location.href = `/explore?hive=${hive.handle}`}
+              >
                 <div className="w-12 h-12 bg-gradient-to-tr from-gray-800 to-black rounded-lg flex items-center justify-center relative overflow-hidden">
                   {hive.avatar_url ? (
                     <img src={hive.avatar_url} className="w-full h-full object-cover" alt="Hive" />
@@ -56,7 +59,7 @@ export default function Communities() {
                   )}
                 </div>
                 <div>
-                  <h3 className="font-bold text-white uppercase italic">{hive.name}</h3>
+                  <h3 className="font-bold text-white uppercase italic group-hover:text-kai transition-colors">{hive.name}</h3>
                   <div className="flex gap-2 text-[10px] text-gray-500 mt-1 uppercase font-black italic">
                     <span>{hive.members_count || 0} MEMBERS</span>
                     <span>•</span>

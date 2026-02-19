@@ -230,12 +230,12 @@ export default function Home() {
             ) : (
               data.map((hive, i) => (
                 <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-2xl flex justify-between items-center group hover:border-kai/50 transition shadow-xl">
-                  <div className="flex items-center gap-5">
+                  <div className="flex items-center gap-5 cursor-pointer" onClick={() => window.location.href = `/explore?hive=${hive.handle}`}>
                     <div className="w-14 h-14 bg-gradient-to-tr from-gray-800 to-black rounded-xl flex items-center justify-center relative overflow-hidden border border-white/5 shadow-inner">
                       {hive.avatar_url ? <img src={hive.avatar_url} className="w-full h-full object-cover" alt="Hive" /> : <MessageSquare size={24} className="text-gray-600" />}
                     </div>
                     <div>
-                      <h3 className="font-bold text-white uppercase italic text-lg shadow-sm">{hive.name}</h3>
+                      <h3 className="font-bold text-white uppercase italic text-lg shadow-sm group-hover:text-kai transition-colors">{hive.name}</h3>
                       <div className="flex gap-2 text-[10px] text-gray-500 mt-1 uppercase font-black italic tracking-widest shadow-sm">
                         <span>{hive.members_count || 0} MEMBERS</span><span>•</span><span>ACTIVE_NOW</span>
                       </div>
