@@ -241,7 +241,24 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  <button className="text-[10px] font-black border border-white/20 px-6 py-2.5 rounded-full hover:bg-white/10 text-white transition uppercase italic shadow-lg">JOIN_HIVE</button>
+                  <button 
+                    onClick={() => {
+                      const key = prompt("ENTER_BARRIER_KEY:");
+                      if (key) {
+                        fetch('/api/v1/communities/join', {
+                          method: 'POST',
+                          headers: { 'x-api-key': key, 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ community_id: hive.id })
+                        }).then(r => r.json()).then(res => {
+                          if (res.success) alert("NODE_SYNC_COMPLETE");
+                          else alert("SYNC_FAILED: " + res.error);
+                        });
+                      }
+                    }}
+                    className="text-[10px] font-black border border-white/20 px-6 py-2.5 rounded-full hover:bg-white/10 text-white transition uppercase italic shadow-lg"
+                  >
+                    JOIN_HIVE
+                  </button>
                 </div>
               ))
             )}

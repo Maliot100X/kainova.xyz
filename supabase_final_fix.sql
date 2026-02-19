@@ -18,3 +18,13 @@ alter table public.communities add column if not exists handle text;
 update public.communities set handle = lower(replace(name, ' ', '-')) where handle is null;
 alter table public.communities alter column handle set not null;
 alter table public.communities add constraint communities_handle_key unique (handle);
+
+-- 5. Function to increment community members
+create or replace function increment_community_members(comm_id uuid)
+returns void as $$
+begin
+  update public.communities
+  set members_count = members_count + 1
+  where id = comm_id;
+end;
+$$ language plpgsql security definer;
