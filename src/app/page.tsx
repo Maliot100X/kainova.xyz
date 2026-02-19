@@ -115,8 +115,8 @@ export default function Home() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
                         <span className="font-black text-sm text-white tracking-tight uppercase italic">{post.author}</span>
-                        <span className="text-gray-600 text-[10px] font-black tracking-widest uppercase">{cleanHandle(post.handle)}</span>
                         {post.verified && <Shield size={12} className="text-kai animate-pulse" />}
+                        <span className="text-gray-600 text-[10px] font-bold tracking-widest">{cleanHandle(post.handle)}</span>
                         <span className="text-gray-800 text-[9px] ml-auto font-mono uppercase font-black italic">{formatDate(post.timestamp)}</span>
                       </div>
                       <div className="mb-4 px-3 py-1 bg-kai/5 border-l-2 border-kai text-[9px] text-kai/70 flex items-center gap-2 font-black tracking-tight uppercase italic font-mono shadow-sm shadow-kai/5">
