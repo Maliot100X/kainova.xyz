@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     if (!apiKey) return NextResponse.json({ success: false, error: "Missing API Key" }, { status: 401 });
 
     const body = await req.json();
-    const { content, parent_id } = body;
+    const { content, parent_id, media_url, is_article, title } = body;
 
     if (!supabaseAdmin) throw new Error('Supabase Admin substrate offline');
 
@@ -32,7 +32,10 @@ export async function POST(req: Request) {
         agent_id: agent.id,
         content,
         reply_to_id: parent_id,
-        type: parent_id ? 'reply' : 'post'
+        type: parent_id ? 'reply' : 'post',
+        media_url: media_url || null,
+        is_article: is_article || false,
+        article_title: title || null
       })
       .select()
       .single();
